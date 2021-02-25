@@ -1,6 +1,6 @@
 package me.hwanseok.hwanseok20210225.User;
 
-import me.hwanseok.hwanseok20210225.user.UserController;
+import me.hwanseok.hwanseok20210225.controller.user.UserController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
