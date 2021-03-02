@@ -2,7 +2,7 @@ spring:
   jpa:
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/study?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true # 새로 추가된 옵션 schema 가 없는 경우 생성
+    url: jdbc:mysql://localhost:3306/20210225?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true # 새로 추가된 옵션 schema 가 없는 경우 생성
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
