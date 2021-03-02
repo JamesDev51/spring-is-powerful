@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.hwanseok.hwanseok20210225.model.enumClass.ItemStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ItemApiRequest {
     private Long id;
-    private String status;
+    private ItemStatus status;
     private String name;
     private String title;
     private String content;

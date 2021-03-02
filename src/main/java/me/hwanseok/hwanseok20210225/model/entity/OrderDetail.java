@@ -2,6 +2,7 @@ package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.hwanseok.hwanseok20210225.model.enumClass.OrderDetailStatus;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -24,7 +25,8 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE) // user.setId() is not permitted
     private Long id;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderDetailStatus status;
     private LocalDateTime arrivalDate;
     private Integer quantity;
     private Integer totalPrice;

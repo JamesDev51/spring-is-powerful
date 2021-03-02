@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.OrderDetail;
 import me.hwanseok.hwanseok20210225.model.entity.OrderGroup;
+import me.hwanseok.hwanseok20210225.model.enumClass.OrderDetailStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.OrderDetailApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.OrderGroupApiRequest;
@@ -43,7 +44,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
         OrderDetailApiRequest body = request.getData();
 
         OrderDetail orderDetail = OrderDetail.builder()
-                .status(body.getStatus())
+                .status(OrderDetailStatus.CONFIRM)
                 .arrivalDate(body.getArrivalDate())
                 .quantity(body.getQuantity())
                 .totalPrice(body.getTotalPrice())

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.Category;
 import me.hwanseok.hwanseok20210225.model.entity.Partner;
+import me.hwanseok.hwanseok20210225.model.enumClass.CategoryType;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.CategoryApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.PartnerApiRequest;
@@ -36,7 +37,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 
         Category category = Category.builder()
                 .id(body.getId())
-                .type(body.getType())
+                .type(CategoryType.MULTI_SHOP)
                 .title(body.getTitle())
                 .build();
         Category newCategory = categoryRepository.save(category);

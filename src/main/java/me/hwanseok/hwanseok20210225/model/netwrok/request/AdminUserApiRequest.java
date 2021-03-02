@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.hwanseok.hwanseok20210225.model.enumClass.AdminUserStatus;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class AdminUserApiRequest {
     private Long id;
     private String account;
     private String password;
-    private String status;
+    private AdminUserStatus status;
     private String role;
     private LocalDateTime lastLoginAt;
     private Integer loginFailCount;

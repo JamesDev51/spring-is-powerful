@@ -2,6 +2,7 @@ package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.hwanseok.hwanseok20210225.model.enumClass.CategoryType;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -25,7 +26,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE) // user.setId() is not permitted
     private Long id;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private CategoryType type;
     private String title;
 
     @CreatedDate

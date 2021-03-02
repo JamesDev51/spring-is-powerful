@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.hwanseok.hwanseok20210225.model.enumClass.PartnerStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class PartnerApiResponse {
     private Long id;
     private String name;
-    private String status;
+    private PartnerStatus status;
     private String address;
     private String callCenter;
     private String partnerNumber;

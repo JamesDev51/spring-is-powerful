@@ -8,6 +8,7 @@ import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.Item;
 import me.hwanseok.hwanseok20210225.model.entity.Partner;
 import me.hwanseok.hwanseok20210225.model.entity.User;
+import me.hwanseok.hwanseok20210225.model.enumClass.ItemStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.ItemApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.UserApiRequest;
@@ -39,7 +40,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
         ItemApiRequest itemApiRequest = request.getData();
 
         Item item = Item.builder()
-                .status(itemApiRequest.getStatus())
+                .status(ItemStatus.REGISTERED)
                 .name(itemApiRequest.getName())
                 .title(itemApiRequest.getTitle())
                 .content(itemApiRequest.getContent())

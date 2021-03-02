@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.User;
+import me.hwanseok.hwanseok20210225.model.enumClass.UserStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.UserApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.UserApiResponse;
@@ -34,7 +35,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
         User user = User.builder()
                 .account(userApiRequest.getEmail())
                 .password(userApiRequest.getPassword())
-                .status(userApiRequest.getStatus())
+                .status(UserStatus.REGISTERED)
                 .phoneNumber(userApiRequest.getPhoneNumber())
                 .email(userApiRequest.getEmail())
                 .registeredAt(LocalDateTime.now())

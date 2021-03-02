@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.Item;
 import me.hwanseok.hwanseok20210225.model.entity.OrderGroup;
+import me.hwanseok.hwanseok20210225.model.enumClass.OrderGroupStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.ItemApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.OrderGroupApiRequest;
@@ -37,7 +38,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
         OrderGroupApiRequest body = request.getData();
 
         OrderGroup orderGroup = OrderGroup.builder()
-                .status(body.getStatus())
+                .status(OrderGroupStatus.EACH)
                 .orderType(body.getOrderType())
                 .revAddress(body.getRevAddress())
                 .revName(body.getRevName())

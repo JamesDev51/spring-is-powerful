@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.Item;
 import me.hwanseok.hwanseok20210225.model.entity.Partner;
+import me.hwanseok.hwanseok20210225.model.enumClass.PartnerStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.ItemApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.PartnerApiRequest;
@@ -39,7 +40,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
         PartnerApiRequest body = request.getData();
 
         Partner partner = Partner.builder()
-                .status(body.getStatus())
+                .status(PartnerStatus.REGISTERED)
                 .name(body.getName())
                 .address(body.getAddress())
                 .callCenter(body.getCallCenter())

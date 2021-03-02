@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.hwanseok.hwanseok20210225.model.enumClass.UserStatus;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ public class UserApiResponse {
     private Long id;
     private String account;
     private String password;
-    private String status;
+    private UserStatus status;
     private String email;
     private String phoneNumber;
 

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
 import me.hwanseok.hwanseok20210225.model.entity.AdminUser;
+import me.hwanseok.hwanseok20210225.model.enumClass.AdminUserStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.AdminUserApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.AdminUserApiResponse;
@@ -36,7 +37,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
         AdminUser adminUser = AdminUser.builder()
                 .account(body.getAccount())
                 .password(body.getPassword())
-                .status(body.getStatus())
+                .status(AdminUserStatus.REGISTERED)
                 .role(body.getRole())
                 .lastLoginAt(body.getLastLoginAt())
                 .loginFailCount(body.getLoginFailCount())

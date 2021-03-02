@@ -2,6 +2,7 @@ package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.hwanseok.hwanseok20210225.model.enumClass.PartnerStatus;
 import org.hibernate.annotations.Fetch;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,7 +28,8 @@ public class Partner {
     @Setter(AccessLevel.NONE) // user.setId() is not permitted
     private Long id;
     private String name;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PartnerStatus status;
     private String address;
     private String callCenter;
     private String partnerNumber;

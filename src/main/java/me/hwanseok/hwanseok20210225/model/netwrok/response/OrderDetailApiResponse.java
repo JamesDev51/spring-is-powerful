@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.hwanseok.hwanseok20210225.model.enumClass.OrderDetailStatus;
+import me.hwanseok.hwanseok20210225.model.enumClass.OrderGroupStatus;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderDetailApiResponse {
     private Long id;
-    private String status;
+    private OrderDetailStatus status;
     private LocalDateTime arrivalDate;
     private Integer quantity;
     private Integer totalPrice;

@@ -2,6 +2,7 @@ package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.hwanseok.hwanseok20210225.model.enumClass.UserStatus;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,7 +28,8 @@ public class User {
     private Long id;
     private String account;
     private String password;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
     private String email;
     private String phoneNumber;
     private LocalDateTime registeredAt;
