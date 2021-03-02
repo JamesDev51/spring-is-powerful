@@ -1,6 +1,7 @@
 package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @ToString(exclude = {"orderGroup","item"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
+@Accessors(chain = true)
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

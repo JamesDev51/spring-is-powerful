@@ -1,5 +1,4 @@
-package me.hwanseok.hwanseok20210225.model.netwrok.request;
-
+package me.hwanseok.hwanseok20210225.model.netwrok.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,15 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ItemApiRequest {
+public class PartnerApiResponse {
     private Long id;
-    private String status;
     private String name;
-    private String title;
-    private String content;
-    private BigDecimal price;
-    private String brandName;
+    private String status;
+    private String address;
+    private String callCenter;
+    private String partnerNumber;
+    private String businessNumber;
+    private String ceoName;
     private LocalDateTime registeredAt;
     private LocalDateTime unregisteredAt;
-    private Long partnerId;
+    private Long categoryId;
 }

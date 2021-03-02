@@ -29,6 +29,7 @@ public class Partner {
     private String name;
     private String status;
     private String address;
+    private String callCenter;
     private String partnerNumber;
     private String businessNumber;
     private String ceoName;

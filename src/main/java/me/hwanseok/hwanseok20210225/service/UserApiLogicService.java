@@ -64,7 +64,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
                     .setEmail(userApiRequest.getEmail())
                     .setPhoneNumber(userApiRequest.getPhoneNumber())
                     .setRegisteredAt(userApiRequest.getRegisteredAt())
-                    .setRegisteredAt(userApiRequest.getUnregisterdAt());
+                    .setRegisteredAt(userApiRequest.getUnregisteredAt());
         }).map(user -> userRepository.save(user))
                 .map(user -> response(user))
                 .orElseGet(() -> Header.ERROR("데이터 없음"));

@@ -6,22 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ItemApiRequest {
+public class CategoryApiRequest {
     private Long id;
-    private String status;
-    private String name;
+    private String type;
     private String title;
-    private String content;
-    private BigDecimal price;
-    private String brandName;
-    private LocalDateTime registeredAt;
-    private LocalDateTime unregisteredAt;
-    private Long partnerId;
 }

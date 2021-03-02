@@ -20,5 +20,5 @@ public class UserApiRequest {
     private String email;
     private String phoneNumber;
     private LocalDateTime registeredAt;
-    private LocalDateTime unregisterdAt;    
+    private LocalDateTime unregisteredAt;
 }

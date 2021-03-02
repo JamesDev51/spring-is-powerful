@@ -46,7 +46,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .price(itemApiRequest.getPrice())
                 .brandName(itemApiRequest.getBrandName())
                 .registeredAt(itemApiRequest.getRegisteredAt())
-                .unregisteredAt(itemApiRequest.getUnregisterdAt())
+                .unregisteredAt(itemApiRequest.getUnregisteredAt())
                 .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))
                 .build();
         Item newItem = itemRepository.save(item);
@@ -74,7 +74,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                     .setPrice(itemApiRequest.getPrice())
                     .setBrandName(itemApiRequest.getBrandName())
                     .setRegisteredAt(itemApiRequest.getRegisteredAt())
-                    .setUnregisteredAt(itemApiRequest.getUnregisterdAt());
+                    .setUnregisteredAt(itemApiRequest.getUnregisteredAt());
             return item;
         })
                 .map(item -> itemRepository.save(item))

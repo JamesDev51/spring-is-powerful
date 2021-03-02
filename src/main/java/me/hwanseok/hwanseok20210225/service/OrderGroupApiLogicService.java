@@ -66,14 +66,15 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
         Optional<OrderGroup> optional = orderGroupRepository.findById(body.getId());
 
         return optional.map(orderGroup -> {
-            orderGroup.setStatus(orderGroup.getStatus())
-                    .setOrderType(orderGroup.getOrderType())
-                    .setRevAddress(orderGroup.getRevAddress())
-                    .setRevName(orderGroup.getRevName())
-                    .setTotalPrice(orderGroup.getTotalPrice())
-                    .setTotalQuantity(orderGroup.getTotalQuantity())
-                    .setOrderAt(orderGroup.getOrderAt())
-                    .setArrivalDate(orderGroup.getArrivalDate());
+            orderGroup.setStatus(body.getStatus())
+                    .setOrderType(body.getOrderType())
+                    .setRevAddress(body.getRevAddress())
+                    .setRevName(body.getRevName())
+                    .setTotalPrice(body.getTotalPrice())
+                    .setTotalQuantity(body.getTotalQuantity())
+                    .setOrderAt(body.getOrderAt())
+                    .setArrivalDate(body.getArrivalDate())
+                    .setUser(userRepository.getOne(body.getUserId()));
             return orderGroup;
         })
                 .map(orderGroup -> orderGroupRepository.save(orderGroup))
