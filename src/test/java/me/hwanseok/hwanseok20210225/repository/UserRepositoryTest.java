@@ -19,15 +19,13 @@ public class UserRepositoryTest extends ApplicationTest {
     UserRepository userRepository;
 
     @Test
+    @Transactional
     public void create(){
-        String account = "Test02";
-        String password = "Test02";
+        String account = "Test03";
+        String password = "Test03";
         String status = "REGISTERED";
-        String email = "Test02@gmail.com";
-        String phoneNumber = "010-1111-2222";
-        LocalDateTime registeredAt = LocalDateTime.now();
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "AdminServer";
+        String email = "Test03@gmail.com";
+        String phoneNumber = "010-1111-3333";
 
         User user = new User();
         user.setAccount(account);
@@ -35,9 +33,6 @@ public class UserRepositoryTest extends ApplicationTest {
         user.setStatus(status);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
-        user.setRegisteredAt(registeredAt);
-        user.setCreatedBy(createdBy);
-        user.setCreatedAt(createdAt);
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);

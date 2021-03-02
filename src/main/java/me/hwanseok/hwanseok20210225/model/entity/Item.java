@@ -1,6 +1,11 @@
 package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"orderDetailList", "partner"})
+@EntityListeners(AuditingEntityListener.class)
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +34,13 @@ public class Item {
 
     private LocalDateTime registeredAt;
     private LocalDateTime unregisteredAt;
+    @CreatedDate
     private LocalDateTime createdAt;
+    @CreatedBy
     private String createdBy;
+    @LastModifiedDate
     private LocalDateTime updatedAt;
+    @LastModifiedBy
     private String updatedBy;
 //     LAZY = SELECT * FROM item WHERE id = ?
 //     EAGER = SELECT * FROM item LEFT OUTER JOIN user_item on item.id = user_item.item_id WHERE item.id = ?
