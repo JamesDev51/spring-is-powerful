@@ -4,6 +4,9 @@ Spring(Boot)의 기반을 탄탄히 다지는 개인 프로젝트
 # 기능
 
 1. Data CRUD
+    - 개별 table CRUD
+    - table 관계의 PK, FK를 통한 CRUD
+        - ex) user의 모든 order 정보 조회(user > order_group > item)
 1. Pagination
 
 # 개발 순서 
