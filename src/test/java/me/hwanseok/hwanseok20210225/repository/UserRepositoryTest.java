@@ -1,31 +1,43 @@
 package me.hwanseok.hwanseok20210225.repository;
 
-
-import me.hwanseok.hwanseok20210225.ApplicationTest;
+import me.hwanseok.hwanseok20210225.component.LoginUserAuditorAware;
+import me.hwanseok.hwanseok20210225.config.JpaConfig;
 import me.hwanseok.hwanseok20210225.model.entity.User;
+import me.hwanseok.hwanseok20210225.model.enumClass.UserStatus;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.sasl.SaslServer;
-import javax.transaction.TransactionScoped;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class UserRepositoryTest extends ApplicationTest {
+@DataJpaTest                                                                    // JPA 테스트 관련 컴포넌트만 Import
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)    // 실제 db 사용
+@DisplayName("ItemRepositoryTest 테스트")
+@Import({JpaConfig.class, LoginUserAuditorAware.class})
+public class UserRepositoryTest {
 
+    // Dependency Injection (DI)
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
     @Transactional
     public void create(){
-        String account = "Test03";
-        String password = "Test03";
-        String status = "REGISTERED";
-        String email = "Test03@gmail.com";
-        String phoneNumber = "010-1111-3333";
+        String account = "Test01";
+        String password = "Test01";
+        UserStatus status = UserStatus.REGISTERED;
+        String email = "Test01@gmail.com";
+        String phoneNumber = "010-1111-2222";
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        //String createdBy = "AdminServer"; // LoginUserAuditorAware 적용으로 자동 createdBy 설정
+
 
         User user = new User();
         user.setAccount(account);
@@ -33,84 +45,53 @@ public class UserRepositoryTest extends ApplicationTest {
         user.setStatus(status);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+        //user.setCreatedAt(createdAt); // LoginUserAuditorAware 적용으로 자동 createdAt, createdBy 설정
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);
+        Assertions.assertEquals("AdminServer", newUser.getCreatedBy());
 
     }
 
     @Test
+    @Transactional
     public void read(){
-        String account = "Test02";
-        String password = "Test02";
-        String status = "REGISTERED";
-        String email = "Test02@gmail.com";
-        String phoneNumber = "010-1111-2222";
-        LocalDateTime registeredAt = LocalDateTime.now();
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "AdminServer";
-        Optional<User> user = userRepository.findByPhoneNumberOrderByIdDesc(phoneNumber);
 
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2221");
         Assertions.assertNotNull(user);
     }
 
     @Test
     @Transactional
     public void update(){
-        Optional<User> user = userRepository.findById(1L);
 
-        user.ifPresent(selectedUser -> {
-            selectedUser.setEmail("ppp");
-            userRepository.save(selectedUser);
-            System.out.println("user :"+selectedUser);
+        Optional<User> user = userRepository.findById(2L);
 
+        user.ifPresent(selectUser ->{
+            selectUser.setAccount("PPPP");
+            selectUser.setUpdatedAt(LocalDateTime.now());
+            selectUser.setUpdatedBy("update method()");
+
+            userRepository.save(selectUser);
         });
-
     }
-    
+
     @Test
     @Transactional
     public void delete(){
-        Optional<User> user = userRepository.findById(1L);
+        Optional<User> user = userRepository.findById(3L);
 
         Assertions.assertTrue(user.isPresent());    // false
+
 
         user.ifPresent(selectUser->{
             userRepository.delete(selectUser);
         });
-        
-        Optional<User> deleteUser = userRepository.findById(1L);
 
-        Assertions.assertFalse(deleteUser.isPresent());
+        Optional<User> deleteUser = userRepository.findById(3L);
+
+        Assertions.assertFalse(deleteUser.isPresent()); // false
     }
 
-    @Test
-    @Transactional 
-    public void readOrderInfo(){
-        String account = "Test02";
-        String password = "Test02";
-        String status = "REGISTERED";
-        String email = "Test02@gmail.com";
-        String phoneNumber = "010-1111-2222";
-        LocalDateTime registeredAt = LocalDateTime.now();
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "AdminServer";
-
-        Long id = 1L;
-        Optional<User> user = userRepository.findById(id);
-        user.ifPresent(selectedUser -> {
-            selectedUser.getOrderGroupList().stream().forEach(orderGroup -> {
-                System.out.println("-----------주문 그룹 ------------");
-                System.out.println("총 주문 가격" + orderGroup.getTotalPrice());
-                orderGroup.getOrderDetailList().stream().forEach(orderDetail -> {
-                    System.out.println("-----------개별 주문 ------------");
-                    System.out.println("주문 상품"+ orderDetail.getItem().getName());
-                    System.out.println("파트너"+ orderDetail.getItem().getPartner().getName());
-                    System.out.println("카테고리"+ orderDetail.getItem().getPartner().getCategory().getTitle());
-                    System.out.println("개별 주문 가격"+orderDetail.getTotalPrice());
-                });
-            });
-        });
-        Assertions.assertNotNull(user);
-    }
 }

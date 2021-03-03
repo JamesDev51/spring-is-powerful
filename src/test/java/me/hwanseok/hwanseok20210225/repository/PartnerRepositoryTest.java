@@ -1,103 +1,57 @@
 package me.hwanseok.hwanseok20210225.repository;
 
-
-import me.hwanseok.hwanseok20210225.ApplicationTest;
+import me.hwanseok.hwanseok20210225.component.LoginUserAuditorAware;
+import me.hwanseok.hwanseok20210225.config.JpaConfig;
 import me.hwanseok.hwanseok20210225.model.entity.Partner;
-import me.hwanseok.hwanseok20210225.model.entity.User;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
-import javax.servlet.http.Part;
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.function.IntSupplier;
 
-public class PartnerRepositoryTest extends ApplicationTest {
+@DataJpaTest                                                                    // JPA 테스트 관련 컴포넌트만 Import
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)    // 실제 db 사용
+@DisplayName("ItemRepositoryTest 테스트")
+@Import({JpaConfig.class, LoginUserAuditorAware.class})
+public class PartnerRepositoryTest {
 
     @Autowired
-    PartnerRepository partnerRepository;
+    private PartnerRepository partnerRepository;
 
     @Test
-    @Transactional
     public void create(){
-        Long id;
-        String name = "컴퓨터-전자제품10 호점";
+        String name = "Partner01";
         String status = "REGISTERED";
-        String address="경기 시흥";
-        String partnerNumber="010-7777-7777";
-        String businessNumber="02-7777-7777";
-        String ceoName="hwanseok";
-        Long categoryId=1L;
+        String address = "서울시 강남구";
+        String callCenter = "070-1111-2222";
+        String partnerNumber = "010-1111-2222";
+        String businessNumber = "1234567890123";
+        String ceoName = "홍길동";
+        LocalDateTime registeredAt = LocalDateTime.now();
         LocalDateTime createdAt = LocalDateTime.now();
         String createdBy = "AdminServer";
+        Long categoryId = 1L;
 
         Partner partner = new Partner();
         partner.setName(name);
         partner.setStatus(status);
         partner.setAddress(address);
+        partner.setCallCenter(callCenter);
         partner.setPartnerNumber(partnerNumber);
         partner.setBusinessNumber(businessNumber);
         partner.setCeoName(ceoName);
-        // TODO 연관관계 설정
-//        partner.setCategoryId(categoryId);
-        partner.setCreatedAt(createdAt);
-        partner.setCreatedBy(createdBy);
+        partner.setRegisteredAt(registeredAt);
+        //partner.setCreatedAt(createdAt); // LoginUserAuditorAware 적용으로 자동 createdAt, createdBy 설정
+        //partner.setCreatedBy(createdBy); // LoginUserAuditorAware 적용으로 자동 createdAt, createdBy 설정
+        //partner.setCategoryId(categoryId);
 
         Partner newPartner = partnerRepository.save(partner);
         Assertions.assertNotNull(newPartner);
+        Assertions.assertEquals(newPartner.getName(), name);
     }
 
-    @Test
-    public void read(){
-        Long id;
-        String name = "컴퓨터-전자제품10 호점";
-        String status = "REGISTERED";
-        String address="경기 시흥";
-        String partnerNumber="010-7777-7777";
-        String businessNumber="02-7777-7777";
-        String ceoName="hwanseok";
-        Long categoryId=1L;
-        Optional<Partner> partner = partnerRepository.findByAddress(address);
-        Assertions.assertNotNull(partner);
-    }
-
-    @Test
-    @Transactional
-    public void update(){
-        String address = "경기 시흥";
-        String newAddress = "경기 시흥 신천동";
-        Optional<Partner> partner = partnerRepository.findByAddress(address);
-        Assertions.assertNotNull(partner);
-
-        partner.ifPresent(selectedPartner -> {
-            selectedPartner.setAddress(newAddress);
-            Partner updatedPartner = partnerRepository.save(selectedPartner);
-
-            Assertions.assertEquals(updatedPartner.getAddress(), newAddress);
-        });
-    }
-    
-    @Test
-    @Transactional
-    public void delete(){
-        String address = "경기 시흥";
-        String newAddress = "경기 시흥 신천동";
-        Optional<Partner> partner = partnerRepository.findByAddress(address);
-        Assertions.assertNotNull(partner);
-
-        partner.ifPresent(selectedPartner -> {
-            partnerRepository.delete(selectedPartner);
-            Optional<Partner> deletedPartner = partnerRepository.findByAddress(address);
-            Assertions.assertTrue(deletedPartner.isPresent());
-        });
-
-        String test = "test";
-        Optional<String> optNotNull = Optional.of(test);  // 인자로 null 값을 받지 않음
-        test = null;
-        Optional<String> optCanBeNull = Optional.ofNullable(test); // 인자로 null 값을 받을 수 있음
-        optNotNull.isPresent(); // null인지 체크
-        optCanBeNull.isPresent(); // null인지 체크
-    }
 }

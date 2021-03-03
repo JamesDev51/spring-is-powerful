@@ -14,14 +14,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ItemApiResponse {
+
     private Long id;
+
     private ItemStatus status;
+
     private String name;
+
     private String title;
+
     private String content;
+
     private BigDecimal price;
+
     private String brandName;
+
     private LocalDateTime registeredAt;
+
     private LocalDateTime unregisteredAt;
+
     private Long partnerId;
 }
+

@@ -1,90 +1,44 @@
 package me.hwanseok.hwanseok20210225.repository;
 
-
-import me.hwanseok.hwanseok20210225.ApplicationTest;
 import me.hwanseok.hwanseok20210225.model.entity.OrderDetail;
-import me.hwanseok.hwanseok20210225.model.entity.User;
-import org.apache.tomcat.jni.Local;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-public class OrderDetailRepositoryTest extends ApplicationTest {
+@DataJpaTest                                                                    // JPA 테스트 관련 컴포넌트만 Import
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)    // 실제 db 사용
+@DisplayName("ItemRepositoryTest 테스트")
+public class OrderDetailRepositoryTest {
 
     @Autowired
-    OrderDetailRepository orderDetailRepository;
+    private OrderDetailRepository orderDetailRepository;
 
     @Test
-    public void create() {
-        String status = "REGISTERED";
-        LocalDateTime arrivalDate = LocalDateTime.now().plusDays(2);
-        Long orderGroupId = 1L;
-        Long itemId = 1L;
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "AdminServer";
-
+    public void create(){
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setStatus(status);
-        orderDetail.setArrivalDate(arrivalDate);
-        // TODO 연관관계 설정
-//        orderDetail.setOrderGroupId(orderGroupId);
-//        orderDetail.setItemId(itemId);
-        orderDetail.setCreatedAt(createdAt);
-        orderDetail.setCreatedBy(createdBy);
+
+        orderDetail.setStatus("WAITING");
+        orderDetail.setArrivalDate(LocalDateTime.now().plusDays(2));
+        orderDetail.setQuantity(1);
+        orderDetail.setTotalPrice(BigDecimal.valueOf(900000));
+
+
+        //orderDetail.setOrderGroupId(1L);    // 어떠한 장바구니에
+        //orderDetail.setItemId(1L);          // 어떠한 상품
+
+
+        orderDetail.setCreatedAt(LocalDateTime.now());
+        orderDetail.setCreatedBy("AdminServer");
 
         OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
         Assertions.assertNotNull(newOrderDetail);
-
     }
 
-    @Test
-    public void read() {
-        Long id = 1L;
-        String status = "REGISTERED";
-        LocalDateTime arrivalDate = LocalDateTime.now().plusDays(2);
-        Long orderGroupId = 1L;
-        Long itemId = 1L;
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "AdminServer";
 
-        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(id);
-
-        Assertions.assertNotNull(orderDetail);
-    }
-
-    @Test
-    @Transactional
-    public void update() {
-        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(1L);
-
-        orderDetail.ifPresent(selectedOrderDetail -> {
-            // TODO 연관관계 포함된 test code 작성
-//            selectedOrderDetail.setOrderGroupId(14L);
-            OrderDetail updatedOrderDetail = orderDetailRepository.save(selectedOrderDetail);
-//            Assertions.assertEquals(updatedOrderDetail.getOrderGroupId(), 14L);
-        });
-
-    }
-
-    @Test
-    @Transactional
-    public void delete() {
-        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(1L);
-
-        Assertions.assertTrue(orderDetail.isPresent());    // false
-
-        orderDetail.ifPresent(selectUser -> {
-            orderDetailRepository.delete(selectUser);
-        });
-
-        Optional<OrderDetail> deleteOrderDetail = orderDetailRepository.findById(1L);
-
-        Assertions.assertFalse(deleteOrderDetail.isPresent());
-    }
 }

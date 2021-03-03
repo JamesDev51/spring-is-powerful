@@ -1,110 +1,111 @@
 package me.hwanseok.hwanseok20210225.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
+import lombok.RequiredArgsConstructor;
 import me.hwanseok.hwanseok20210225.model.entity.Item;
-import me.hwanseok.hwanseok20210225.model.entity.Partner;
-import me.hwanseok.hwanseok20210225.model.entity.User;
-import me.hwanseok.hwanseok20210225.model.enumClass.ItemStatus;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.ItemApiRequest;
-import me.hwanseok.hwanseok20210225.model.netwrok.request.UserApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.ItemApiResponse;
-import me.hwanseok.hwanseok20210225.model.netwrok.response.UserApiResponse;
-import me.hwanseok.hwanseok20210225.repository.ItemRepository;
 import me.hwanseok.hwanseok20210225.repository.PartnerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Service
-public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
+@RequiredArgsConstructor
+public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item> {
 
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Autowired
-    private PartnerRepository partnerRepository;
+    private final PartnerRepository partnerRepository;
 
     @Override
     public Header<ItemApiResponse> create(Header<ItemApiRequest> request) {
-        ItemApiRequest itemApiRequest = request.getData();
 
-        Item item = Item.builder()
-                .status(ItemStatus.REGISTERED)
-                .name(itemApiRequest.getName())
-                .title(itemApiRequest.getTitle())
-                .content(itemApiRequest.getContent())
-                .price(itemApiRequest.getPrice())
-                .brandName(itemApiRequest.getBrandName())
-                .registeredAt(itemApiRequest.getRegisteredAt())
-                .unregisteredAt(itemApiRequest.getUnregisteredAt())
-                .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))
-                .build();
-        Item newItem = itemRepository.save(item);
-        return response(newItem);
+        return Optional.ofNullable(request.getData())
+                .map(body ->{
+                    Item item = Item.builder()
+                            .status(body.getStatus())
+                            .name(body.getName())
+                            .title(body.getTitle())
+                            .content(body.getContent())
+                            .price(body.getPrice())
+                            .brandName(body.getBrandName())
+                            .registeredAt(LocalDateTime.now())
+                            .partner(partnerRepository.getOne(body.getPartnerId()))
+                            .build();
+
+                    return item;
+                })
+                .map(newItem -> baseRepository.save(newItem))
+                .map(newItem -> response(newItem))
+                .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
-        return itemRepository
-                .findById(id)
-                .map(this::response)
-                .orElseGet(() -> Header.ERROR("데이터 없음"));
+
+        return baseRepository.findById(id)
+                .map(item -> response(item))
+                .orElseGet(()-> Header.ERROR("데이터 없음"));
     }
 
     @Override
     public Header<ItemApiResponse> update(Header<ItemApiRequest> request) {
-        ItemApiRequest itemApiRequest = request.getData();
-        Optional<Item> optional = itemRepository.findById(itemApiRequest.getId());
 
-        return optional.map(item -> {
-            item.setStatus(itemApiRequest.getStatus())
-                    .setName(itemApiRequest.getName())
-                    .setTitle(itemApiRequest.getTitle())
-                    .setContent(itemApiRequest.getContent())
-                    .setPrice(itemApiRequest.getPrice())
-                    .setBrandName(itemApiRequest.getBrandName())
-                    .setRegisteredAt(itemApiRequest.getRegisteredAt())
-                    .setUnregisteredAt(itemApiRequest.getUnregisteredAt());
-            return item;
-        })
-                .map(item -> itemRepository.save(item))
-                .map(this::response)
-                .orElseGet(() -> Header.ERROR("데이터 없음"));
+        return Optional.ofNullable(request.getData())
+                .map(body ->{
+                    return baseRepository.findById(body.getId());
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(item -> {
+
+                    ItemApiRequest body = request.getData();
+                    item.setStatus(body.getStatus())
+                            .setTitle(body.getTitle())
+                            .setContent(body.getContent())
+                            .setName(body.getName())
+                            .setPrice(body.getPrice())
+                            .setBrandName(body.getBrandName())
+                            .setPartner(partnerRepository.getOne(body.getPartnerId()))
+                            .setStatus(body.getStatus())
+                            .setRegisteredAt(body.getRegisteredAt())
+                            .setUnregisteredAt(body.getUnregisteredAt())
+                    ;
+                    return item;
+
+                })
+                .map(changeItem -> baseRepository.save(changeItem))
+                .map(newItem -> response(newItem))
+                .orElseGet(()->Header.ERROR("데이터 없음"));
+
     }
 
     @Override
     public Header delete(Long id) {
-        Optional<Item> optional = itemRepository.findById(id);
 
-        return optional.map(item -> {
-            itemRepository.delete(item);
-            return Header.OK();
-        }).orElseGet(() -> Header.ERROR("데이터 없음"));
-
+        return baseRepository.findById(id)
+                .map(item -> {
+                    baseRepository.delete(item);
+                    return Header.OK();
+                })
+                .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<ItemApiResponse> response(Item item) {
+    public Header<ItemApiResponse> response(Item item){
 
-        ItemApiResponse itemApiResponse = ItemApiResponse.builder()
+        ItemApiResponse body = ItemApiResponse.builder()
                 .id(item.getId())
                 .status(item.getStatus())
                 .name(item.getName())
+                .title(item.getTitle())
                 .content(item.getContent())
                 .price(item.getPrice())
                 .brandName(item.getBrandName())
+                .registeredAt(item.getRegisteredAt())
+                .unregisteredAt(item.getUnregisteredAt())
                 .partnerId(item.getPartner().getId())
                 .build();
-        return Header.OK(itemApiResponse);
+
+        return Header.OK(body);
     }
 }

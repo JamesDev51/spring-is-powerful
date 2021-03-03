@@ -1,80 +1,49 @@
 package me.hwanseok.hwanseok20210225.repository;
 
-
-import me.hwanseok.hwanseok20210225.ApplicationTest;
-import me.hwanseok.hwanseok20210225.model.entity.OrderDetail;
+import me.hwanseok.hwanseok20210225.component.LoginUserAuditorAware;
+import me.hwanseok.hwanseok20210225.config.JpaConfig;
 import me.hwanseok.hwanseok20210225.model.entity.OrderGroup;
-import org.aspectj.weaver.ast.Or;
+import me.hwanseok.hwanseok20210225.model.enumClass.OrderType;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-public class OrderGroupRepositoryTest extends ApplicationTest {
+@DataJpaTest                                                                    // JPA 테스트 관련 컴포넌트만 Import
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)    // 실제 db 사용
+@DisplayName("ItemRepositoryTest 테스트")
+@Import({JpaConfig.class, LoginUserAuditorAware.class})
+public class OrderGroupRepositoryTest {
 
     @Autowired
-    OrderGroupRepository orderGroupRepository;
+    private OrderGroupRepository orderGroupRepository;
 
     @Test
-    public void create() {
-        String status = "REGISTERED";
-        String orderType = "ALL";
-        Long userId = 1L;
+    public void create(){
 
         OrderGroup orderGroup = new OrderGroup();
-        orderGroup.setStatus(status);
-        orderGroup.setOrderType(orderType);
-//        orderGroup.setUserId(userId);
+        orderGroup.setStatus("COMPLETE");
+        orderGroup.setOrderType(OrderType.ALL);
+        orderGroup.setRevAddress("서울시 강남구");
+        orderGroup.setRevName("홍길동");
+        orderGroup.setPaymentType("CARD");
+        orderGroup.setTotalPrice(BigDecimal.valueOf(900000));
+        orderGroup.setTotalQuantity(1);
+        orderGroup.setOrderAt(LocalDateTime.now().minusDays(2));
+        orderGroup.setArrivalDate(LocalDateTime.now());
+        //orderGroup.setCreatedAt(LocalDateTime.now()); // LoginUserAuditorAware 적용으로 자동 createdAt, createdBy 설정
+        //orderGroup.setCreatedBy("AdminServer"); // LoginUserAuditorAware 적용으로 자동 createdAt, createdBy 설정
+        //orderGroup.setUserId(1L);
 
         OrderGroup newOrderGroup = orderGroupRepository.save(orderGroup);
         Assertions.assertNotNull(newOrderGroup);
-    }
-
-    @Test
-    public void read() {
-        Long id = 1L;
-        String status = "REGISTERED";
-        LocalDateTime arrivalDate = LocalDateTime.now().plusDays(2);
-        Long orderGroupId = 1L;
-        Long itemId = 1L;
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "AdminServer";
-
-        Optional<OrderGroup> orderGroup = orderGroupRepository.findById(id);
-
-        Assertions.assertNotNull(orderGroup);
-    }
-
-    @Test
-    @Transactional
-    public void update() {
-        Optional<OrderGroup> orderGroup = orderGroupRepository.findById(1L);
-
-        orderGroup.ifPresent(selectedOrderGroup -> {
-            String orderType = "EACH";
-            selectedOrderGroup.setOrderType(orderType);
-            OrderGroup updatedOrderGroup = orderGroupRepository.save(selectedOrderGroup);
-            Assertions.assertEquals(updatedOrderGroup.getOrderType(), orderType);
-        });
 
     }
 
-    @Test
-    @Transactional
-    public void delete() {
-        Long id = 1L;
-        Optional<OrderGroup> orderGroup = orderGroupRepository.findById(id);
-
-        Assertions.assertTrue(orderGroup.isPresent());    // false
-
-        orderGroup.ifPresent(item -> {
-            orderGroupRepository.delete(item);
-        });
-
-        Optional<OrderGroup> deletedOrderGroup = orderGroupRepository.findById(1L);
-        Assertions.assertFalse(deletedOrderGroup.isPresent());
-    }
 }

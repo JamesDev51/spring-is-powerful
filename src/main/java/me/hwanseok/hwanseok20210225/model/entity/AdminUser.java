@@ -1,9 +1,6 @@
 package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
-import lombok.experimental.Accessors;
-import me.hwanseok.hwanseok20210225.model.enumClass.AdminUserStatus;
-import me.hwanseok.hwanseok20210225.model.enumClass.UserStatus;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,38 +9,46 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Entity
 @EntityListeners(AuditingEntityListener.class)
-@Builder
-@Accessors(chain = true)
 public class AdminUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE) // user.setId() is not permitted
     private Long id;
+
     private String account;
+
     private String password;
-    @Enumerated(EnumType.STRING)
-    private AdminUserStatus status;
+
+    private String status;
+
     private String role;
+
     private LocalDateTime lastLoginAt;
-    private Integer loginFailCount;
+
     private LocalDateTime passwordUpdatedAt;
 
+    private int loginFailCount;
+
     private LocalDateTime registeredAt;
+
     private LocalDateTime unregisteredAt;
+
     @CreatedDate
     private LocalDateTime createdAt;
+
     @CreatedBy
     private String createdBy;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
     @LastModifiedBy
     private String updatedBy;
-
 }
+

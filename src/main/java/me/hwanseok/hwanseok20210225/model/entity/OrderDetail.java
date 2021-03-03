@@ -2,7 +2,6 @@ package me.hwanseok.hwanseok20210225.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import me.hwanseok.hwanseok20210225.model.enumClass.OrderDetailStatus;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,40 +9,51 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @ToString(exclude = {"orderGroup","item"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @Accessors(chain = true)
 public class OrderDetail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE) // user.setId() is not permitted
     private Long id;
-    @Enumerated(EnumType.STRING)
-    private OrderDetailStatus status;
+
+    private String status;
+
     private LocalDateTime arrivalDate;
+
     private Integer quantity;
-    private Integer totalPrice;
 
-    @ManyToOne
-    private Item item;
-
-    @ManyToOne
-    private OrderGroup orderGroup;
+    private BigDecimal totalPrice;
 
     @CreatedDate
     private LocalDateTime createdAt;
+
     @CreatedBy
     private String createdBy;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
     @LastModifiedBy
     private String updatedBy;
+
+
+    // OrderDetail N : 1 Item
+    @ManyToOne
+    private Item item;
+
+
+    // OrderDetail N : 1 OrderGroup
+    @ManyToOne
+    private OrderGroup orderGroup;
 
 }

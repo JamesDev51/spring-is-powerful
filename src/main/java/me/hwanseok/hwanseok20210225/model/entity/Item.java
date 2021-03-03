@@ -14,42 +14,56 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"orderDetailList", "partner"})
+@Entity
+@ToString(exclude = {"orderDetailList","partner"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @Accessors(chain = true)
 public class Item {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE) // user.setId() is not permitted
     private Long id;
+
     @Enumerated(EnumType.STRING)
-    private ItemStatus status;
+    private ItemStatus status;  // 등록 / 해지 / 검수중(등록대기중)
+
     private String name;
+
     private String title;
+
     private String content;
+
     private BigDecimal price;
+
     private String brandName;
 
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime unregisteredAt;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @LastModifiedBy
+    private String updatedBy;
+
+    // Item N : 1 Partner
     @ManyToOne
     private Partner partner;
 
-    private LocalDateTime registeredAt;
-    private LocalDateTime unregisteredAt;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @CreatedBy
-    private String createdBy;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-    @LastModifiedBy
-    private String updatedBy;
-//     LAZY = SELECT * FROM item WHERE id = ?
-//     EAGER = SELECT * FROM item LEFT OUTER JOIN user_item on item.id = user_item.item_id WHERE item.id = ?
-    @OneToMany(fetch = FetchType.LAZY , mappedBy = "item")
+
+    // Item  1 : N OrderDetail
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<OrderDetail> orderDetailList;
+
 }
