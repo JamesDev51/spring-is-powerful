@@ -1,48 +1,41 @@
 package me.hwanseok.hwanseok20210225.controller.api;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.hwanseok.hwanseok20210225.controller.CrudController;
 import me.hwanseok.hwanseok20210225.ifs.CrudInterface;
+import me.hwanseok.hwanseok20210225.model.entity.User;
 import me.hwanseok.hwanseok20210225.model.netwrok.Header;
 import me.hwanseok.hwanseok20210225.model.netwrok.request.UserApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.UserApiResponse;
+import me.hwanseok.hwanseok20210225.model.netwrok.response.UserOrderInfoApiResponse;
 import me.hwanseok.hwanseok20210225.service.UserApiLogicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
-public class UserApiController implements CrudInterface<UserApiRequest, UserApiResponse> {
+@RequiredArgsConstructor
+public class UserApiController extends CrudController<UserApiRequest, UserApiResponse, User> {
 
-    @Autowired
-    private UserApiLogicService userApiLogicService;
+    private final UserApiLogicService userApiLogicService;
 
-    @Override
-    @PostMapping("")
-    public Header<UserApiResponse> create(@RequestBody Header<UserApiRequest> userApiRequest) {
-        log.info("{}", userApiRequest);
-        return userApiLogicService.create(userApiRequest);
+    @GetMapping("/{id}/orderInfo")
+    public Header<UserOrderInfoApiResponse> orderInfo(@PathVariable Long id){
+        return userApiLogicService.orderInfo(id);
     }
 
-    @Override
-    @GetMapping("{id}")
-    public Header<UserApiResponse> read(@PathVariable(name = "id") Long id) {
-        log.info("{}", id);
-        return userApiLogicService.read(id);
-    }
-
-    @Override
-    @PutMapping("")
-    public Header<UserApiResponse> update(@RequestBody Header<UserApiRequest> userApiRequest) {
-        log.info("{}", userApiRequest);
-        return userApiLogicService.update(userApiRequest);
-    }             
-
-    @Override
-    @DeleteMapping("{id}")
-    public Header delete(@PathVariable  Long id) {
-        log.info("{}", id);
-        return userApiLogicService.delete(id);
+    @GetMapping("/search")
+    public Header<List<UserApiResponse>> findAll(@PageableDefault(sort = { "id" }, direction = Sort.Direction.ASC) Pageable pageable){
+        log.info("{}",pageable);
+        return userApiLogicService.search(pageable);
     }
 }
+
 

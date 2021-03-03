@@ -10,6 +10,7 @@ import me.hwanseok.hwanseok20210225.model.netwrok.request.UserApiRequest;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.ItemApiResponse;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.OrderGroupApiResponse;
 import me.hwanseok.hwanseok20210225.model.netwrok.response.UserApiResponse;
+import me.hwanseok.hwanseok20210225.model.netwrok.response.UserOrderInfoApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -150,16 +151,15 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
      * @param id
      * @return id -> user -> List<OrderGroup> -> List<OrderGroupApiResponse>
      */
-    public Header<UserApiResponse> orderInfo(Long id) {
+    public Header<UserOrderInfoApiResponse> orderInfo(Long id) {
 
-        // id -> user
+        // user
         User user = baseRepository.getOne(id);
         UserApiResponse userApiResponse = response(user);
 
-        // user -> List<OrderGroup>
-        List<OrderGroup> orderGroupList = user.getOrderGroupList();
 
-        // List<OrderGroup> -> List<OrderGroupApiResponse>
+        // orderGorup
+        List<OrderGroup> orderGroupList = user.getOrderGroupList();
         List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroupList.stream()
                 .map(orderGroup -> {
                     OrderGroupApiResponse orderGroupApiResponse = orderGroupApiLogicService.response(orderGroup).getData();
@@ -176,7 +176,11 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .collect(Collectors.toList());
 
         userApiResponse.setOrderGroupApiResponseList(orderGroupApiResponseList);
+        UserOrderInfoApiResponse userOrderInfoApiResponse = UserOrderInfoApiResponse.builder()
+                .userApiResponse(userApiResponse)
+                .build();
 
-        return Header.OK(userApiResponse);
+
+        return Header.OK(userOrderInfoApiResponse);
     }
 }
