@@ -1,6 +1,11 @@
 # spring-is-powerful
 Spring(Boot)의 기반을 탄탄히 다지는 개인 프로젝트
 
+# 기능
+
+1. Data CRUD
+1. Pagination
+
 # 개발 순서 
 
 1. ERD 설계
